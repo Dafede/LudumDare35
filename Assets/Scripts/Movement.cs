@@ -40,11 +40,11 @@ public class Movement : MonoBehaviour {
 		}
 		if (Input.GetKey (KeyCode.A)) {
 			currentKeyPressed=KeyCode.A;
-			transform.Rotate (new Vector3(0, anglesRotate * Time.deltaTime, 0));
+			transform.Rotate (new Vector3(0, -anglesRotate * Time.deltaTime, 0));
 		}
 		if (Input.GetKey (KeyCode.D)) {
 			currentKeyPressed=KeyCode.D;
-			transform.Rotate (new Vector3(0, -anglesRotate * Time.deltaTime, 0));
+			transform.Rotate (new Vector3(0, anglesRotate * Time.deltaTime, 0));
 		}
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
