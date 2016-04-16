@@ -20,17 +20,20 @@ public class Movement : MonoBehaviour {
 
 	public GameObject humanMorph = null;
 	public GameObject lightMorph = null;
+	Animator animator;
 
 		
 	// Use this for initialization
 	void Start () {
+		animator = humanMorph.GetComponent<Animator>();
 	}
 
 	// Update is called once per frame
 	void Update () {
 		// User Input
-
+		animator.SetBool ("Run", false);
 		if (Input.GetKey (KeyCode.W)) {
+			animator.SetBool ("Run", true);
 			currentKeyPressed=KeyCode.W;
 			transform.position += transform.forward * (movSpeed * Time.deltaTime);
 		}
@@ -39,11 +42,11 @@ public class Movement : MonoBehaviour {
 			transform.position += -transform.forward * (movSpeed * Time.deltaTime);
 		}
 		if (Input.GetKey (KeyCode.A)) {
-			currentKeyPressed=KeyCode.A;
+			currentKeyPressed = KeyCode.A;
 			transform.Rotate (new Vector3(0, -anglesRotate * Time.deltaTime, 0));
 		}
 		if (Input.GetKey (KeyCode.D)) {
-			currentKeyPressed=KeyCode.D;
+			currentKeyPressed = KeyCode.D;
 			transform.Rotate (new Vector3(0, anglesRotate * Time.deltaTime, 0));
 		}
 
