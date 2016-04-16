@@ -11,8 +11,16 @@ public class Movement : MonoBehaviour {
 	private float startTime;
 	float speed = 50.0F;
 	private float journeyLength;
-	 Vector3 startMarker;
+	Vector3 startMarker;
 	Vector3 endMarker;
+
+	public float movSpeed = 20.0f;
+	public float anglesRotate = 180.0f;
+	public float sprintSpeed = 15.0f;
+
+	public GameObject humanMorph = null;
+	public GameObject lightMorph = null;
+
 		
 	// Use this for initialization
 	void Start () {
@@ -20,55 +28,54 @@ public class Movement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
+		// User Input
+
 		if (Input.GetKey (KeyCode.W)) {
 			currentKeyPressed=KeyCode.W;
-			pos = transform.position;
-			pos.z += spacing;
-			pos.x += spacing;
-			//transform.LookAt (Vector3.Lerp(transform.position, pos, fracJourney));
-			transform.position = pos;
-
+			transform.position += transform.forward * (movSpeed * Time.deltaTime);
 		}
 		if (Input.GetKey (KeyCode.S)) {
 			currentKeyPressed=KeyCode.S;
-			pos = transform.position;
-			pos.z -= spacing;
-			pos.x -= spacing;
-			transform.position = pos;
+			transform.position += -transform.forward * (movSpeed * Time.deltaTime);
 		}
 		if (Input.GetKey (KeyCode.A)) {
 			currentKeyPressed=KeyCode.A;
-			pos = transform.position;
-			pos.x -= spacing;
-			pos.z += spacing;
-			transform.position = pos;
+			transform.Rotate (new Vector3(0, anglesRotate * Time.deltaTime, 0));
 		}
 		if (Input.GetKey (KeyCode.D)) {
 			currentKeyPressed=KeyCode.D;
-			pos = transform.position;
-			pos.x += spacing;
-			pos.z -= spacing;
-			transform.position = pos;
+			transform.Rotate (new Vector3(0, -anglesRotate * Time.deltaTime, 0));
 		}
+
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			currentPosition=this.transform.position;
+
+			dash = true;
+			startTime = Time.time;
+			endMarker= this.transform.position;
+			Vector3 auxEnd = endMarker + transform.forward * sprintSpeed;
+			endMarker = auxEnd;
+			startMarker = this.transform.position;
+			journeyLength = Vector3.Distance(startMarker,endMarker);
+
+			// change model
+			humanMorph.SetActive (false);
+			lightMorph.SetActive (true);
+		}
+
+		// Logic
 				
 		if (dash) {
 			float distCovered = (Time.time - startTime) * speed;
 			float fracJourney = distCovered / journeyLength;
-			if (fracJourney >= 0.9)
+			if (fracJourney >= 0.9){
 				dash = false;
+				// back model
+				humanMorph.SetActive (true);
+				lightMorph.SetActive (false);
+			}
 			transform.position = Vector3.Lerp(startMarker, endMarker, fracJourney);
 		}
-		if (Input.GetKeyDown(KeyCode.Space)) {
-			currentPosition=this.transform.position;
-			dash = true;
-			startTime = Time.time;
-			endMarker= this.transform.position;
-			Vector3 auxEnd = endMarker;
-			auxEnd.x += 15;
-			endMarker = auxEnd;
-			startMarker = this.transform.position;
-			journeyLength = Vector3.Distance(startMarker,endMarker);
-		}
+
 	}
 }
