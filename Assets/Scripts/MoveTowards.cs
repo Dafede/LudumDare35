@@ -13,7 +13,10 @@ public class MoveTowards : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.position = Vector3.MoveTowards (transform.position, objective.transform.position, Time.deltaTime * movSpeed);
-		Debug.Log (transform.position);
+		Vector3 objectivePosition = new Vector3 (objective.transform.position.x, transform.position.y, objective.transform.position.z);
+		transform.position = Vector3.MoveTowards (transform.position, objectivePosition, Time.deltaTime * movSpeed);
+
+		transform.LookAt (new Vector3(objective.transform.position.x, transform.position.y, objective.transform.position.z));
+	
 	}
 }

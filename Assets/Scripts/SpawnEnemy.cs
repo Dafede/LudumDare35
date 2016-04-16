@@ -17,7 +17,6 @@ public class SpawnEnemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log ("Time: " + Time.time);
 		if (Time.time - timeLastSpawn >= timeBetweenSpawn) {
 			GameObject pointer = Instantiate (enemyToSpawn, transform.position, Quaternion.identity) as GameObject;
 			pointer.GetComponent<MoveTowards> ().objective = objectiveOfEnemy;

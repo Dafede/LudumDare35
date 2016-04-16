@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class Movement : MonoBehaviour {
 
 	Vector3 pos;
@@ -18,6 +19,9 @@ public class Movement : MonoBehaviour {
 	public float anglesRotate = 180.0f;
 	public float sprintSpeed = 15.0f;
 
+	public GameObject explosionParticles = null;
+	public GameObject enemyExplosionParticles = null;
+	private ObjectPool enemyExplosionsParticlesObjectPool = null;
 	public GameObject humanMorph = null;
 	public GameObject lightMorph = null;
 	Animator animator;
@@ -26,6 +30,8 @@ public class Movement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		animator = humanMorph.GetComponent<Animator>();
+
+		enemyExplosionsParticlesObjectPool = new ObjectPool (enemyExplosionParticles, null, true, 100);
 	}
 
 	// Update is called once per frame
@@ -64,6 +70,7 @@ public class Movement : MonoBehaviour {
 			// change model
 			humanMorph.SetActive (false);
 			lightMorph.SetActive (true);
+			Instantiate(explosionParticles, transform.position, Quaternion.identity);
 		}
 
 		// Logic
@@ -79,6 +86,20 @@ public class Movement : MonoBehaviour {
 			}
 			transform.position = Vector3.Lerp(startMarker, endMarker, fracJourney);
 		}
+	}
 
+	void OnTriggerEnter(Collider other){
+		if (other.tag == "Enemy"){
+			if (dash == true) {
+				GameObject o = enemyExplosionsParticlesObjectPool.GetPooledObject ();
+				o.transform.position = other.transform.position;
+				o.SetActive (true);
+				Destroy (other.gameObject);	
+			} else {
+				// HURTED BY ENEMY
+				//Destroy(gameObject);
+			}
+
+		}
 	}
 }
