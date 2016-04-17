@@ -71,6 +71,7 @@ public class Movement : MonoBehaviour {
 			humanMorph.SetActive (false);
 			lightMorph.SetActive (true);
 			Instantiate(explosionParticles, transform.position, Quaternion.identity);
+			// Poner aqui el sonido de entrar al modo dash
 		}
 
 		// Logic
@@ -83,6 +84,7 @@ public class Movement : MonoBehaviour {
 				// back model
 				humanMorph.SetActive (true);
 				lightMorph.SetActive (false);
+				// poner aqui el sonido de salir del modo dash
 			}
 			transform.position = Vector3.Lerp(startMarker, endMarker, fracJourney);
 		}
@@ -94,10 +96,13 @@ public class Movement : MonoBehaviour {
 				GameObject o = enemyExplosionsParticlesObjectPool.GetPooledObject ();
 				o.transform.position = other.transform.position;
 				o.SetActive (true);
-				Destroy (other.gameObject);	
+				Destroy (other.gameObject);
+				// poner aqui el sonido de matar a un enemigo
 			} else {
 				// HURTED BY ENEMY
 				//Destroy(gameObject);
+
+				// poner aqui el sonido de ser golpeado por un enemigo
 			}
 
 		}
