@@ -58,7 +58,7 @@ public class Movement : MonoBehaviour {
 			currentKeyPressed=KeyCode.W;
 			transform.position += -transform.right * (movSpeed * Time.deltaTime);
 
-			Transform childTransform = transform.FindChild ("characterFinalAnim01");
+			Transform childTransform = transform.FindChild ("characterFinalV2");
 			Vector3 newDir = Vector3.RotateTowards (childTransform.forward, transform.forward, 2.0f * Time.deltaTime, 0.0f);
 			childTransform.transform.rotation = Quaternion.LookRotation (newDir);
 
@@ -69,7 +69,7 @@ public class Movement : MonoBehaviour {
 			animator.SetBool ("Run", true);
 			transform.position += transform.right * (movSpeed * Time.deltaTime);
 
-			Transform childTransform = transform.FindChild ("characterFinalAnim01");
+			Transform childTransform = transform.FindChild ("characterFinalV2");
 			Vector3 newDir = Vector3.RotateTowards (childTransform.forward, -transform.forward, 2.0f * Time.deltaTime, 0.0f);
 			childTransform.transform.rotation = Quaternion.LookRotation (newDir);
 
