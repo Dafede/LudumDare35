@@ -130,4 +130,10 @@ public class Movement : MonoBehaviour {
 
 		}
 	}
+	void OnCollisionEnter(Collision collision) {
+		Debug.Log ("COLLISION");
+		//this.GetComponent<Rigidbody>().set(new Vector3 (0,0,0));
+		//this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+		//this.GetComponent<Rigidbody>().angularVelocity = Vector3.zero; 
+	}
 }
