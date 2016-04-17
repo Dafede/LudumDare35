@@ -24,6 +24,8 @@ public class Movement : MonoBehaviour {
 	private ObjectPool enemyExplosionsParticlesObjectPool = null;
 	public GameObject humanMorph = null;
 	public GameObject lightMorph = null;
+	WaitForSeconds waitLifeTime = null;
+	bool specialMode = false;
 	Animator animator;
 
 		
@@ -37,13 +39,15 @@ public class Movement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// debug input
-		if(Input.GetKey(KeyCode.Z))
+		if(Input.GetKey(KeyCode.Q))
 		{
+			// can enter mode
 			TimeStop.StopTime ();
-		}
-		if(Input.GetKey(KeyCode.X))
-		{
-			TimeStop.PlayTime ();
+			waitLifeTime = new WaitForSeconds (5.0f);
+			humanMorph.SetActive (false);
+			lightMorph.SetActive (true);
+			specialMode = true;
+			StartCoroutine (ExistSpecialMode());
 		}
 
 
@@ -115,7 +119,7 @@ public class Movement : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 		if (other.tag == "Enemy"){
-			if (dash == true) {
+			if (dash == true || specialMode == true) {
 				GameObject o = enemyExplosionsParticlesObjectPool.GetPooledObject ();
 				o.transform.position = other.transform.position;
 				o.SetActive (true);
@@ -123,11 +127,19 @@ public class Movement : MonoBehaviour {
 				// poner aqui el sonido de matar a un enemigo
 			} else {
 				// HURTED BY ENEMY
-				//Destroy(gameObject);
+				Destroy(gameObject);
 
 				// poner aqui el sonido de ser golpeado por un enemigo
 			}
 
 		}
+	}
+
+	IEnumerator ExistSpecialMode(){
+		yield return waitLifeTime;
+		specialMode = false;
+		humanMorph.SetActive (true);
+		lightMorph.SetActive (false);
+		TimeStop.PlayTime ();
 	}
 }
