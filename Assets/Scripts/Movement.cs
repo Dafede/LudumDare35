@@ -28,12 +28,15 @@ public class Movement : MonoBehaviour {
 	bool specialMode = false;
 	Animator animator;
 
+	Rigidbody rb;
+
 		
 	// Use this for initialization
 	void Start () {
 		animator = humanMorph.GetComponent<Animator>();
 
 		enemyExplosionsParticlesObjectPool = new ObjectPool (enemyExplosionParticles, null, true, 100);
+		rb = GetComponent<Rigidbody> ();
 	}
 
 	// Update is called once per frame
@@ -56,7 +59,10 @@ public class Movement : MonoBehaviour {
 		if (Input.GetKey (KeyCode.W)) {
 			animator.SetBool ("Run", true);
 			currentKeyPressed=KeyCode.W;
-			transform.position += -transform.right * (movSpeed * Time.deltaTime);
+			// transform.position += -transform.right * (movSpeed * Time.deltaTime);
+			Vector3 velocity = -transform.right * movSpeed * Time.deltaTime;
+			rb.MovePosition (rb.position + velocity);
+
 
 			Transform childTransform = transform.FindChild ("characterFinalV2");
 			Vector3 newDir = Vector3.RotateTowards (childTransform.forward, transform.forward, 2.0f * Time.deltaTime, 0.0f);
@@ -67,7 +73,9 @@ public class Movement : MonoBehaviour {
 		if (Input.GetKey (KeyCode.S)) {
 			currentKeyPressed=KeyCode.S;
 			animator.SetBool ("Run", true);
-			transform.position += transform.right * (movSpeed * Time.deltaTime);
+			// transform.position += transform.right * (movSpeed * Time.deltaTime);
+			Vector3 velocity = transform.right * movSpeed * Time.deltaTime;
+			rb.MovePosition (rb.position + velocity);
 
 			Transform childTransform = transform.FindChild ("characterFinalV2");
 			Vector3 newDir = Vector3.RotateTowards (childTransform.forward, -transform.forward, 2.0f * Time.deltaTime, 0.0f);
