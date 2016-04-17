@@ -36,16 +36,39 @@ public class Movement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		// debug input
+		if(Input.GetKey(KeyCode.Z))
+		{
+			TimeStop.StopTime ();
+		}
+		if(Input.GetKey(KeyCode.X))
+		{
+			TimeStop.PlayTime ();
+		}
+
+
 		// User Input
 		animator.SetBool ("Run", false);
 		if (Input.GetKey (KeyCode.W)) {
 			animator.SetBool ("Run", true);
 			currentKeyPressed=KeyCode.W;
-			transform.position += transform.forward * (movSpeed * Time.deltaTime);
+			transform.position += -transform.right * (movSpeed * Time.deltaTime);
+
+			Transform childTransform = transform.FindChild ("characterFinalAnim01");
+			Vector3 newDir = Vector3.RotateTowards (childTransform.forward, transform.forward, 2.0f * Time.deltaTime, 0.0f);
+			childTransform.transform.rotation = Quaternion.LookRotation (newDir);
+
+
 		}
 		if (Input.GetKey (KeyCode.S)) {
 			currentKeyPressed=KeyCode.S;
-			transform.position += -transform.forward * (movSpeed * Time.deltaTime);
+			animator.SetBool ("Run", true);
+			transform.position += transform.right * (movSpeed * Time.deltaTime);
+
+			Transform childTransform = transform.FindChild ("characterFinalAnim01");
+			Vector3 newDir = Vector3.RotateTowards (childTransform.forward, -transform.forward, 2.0f * Time.deltaTime, 0.0f);
+			childTransform.transform.rotation = Quaternion.LookRotation (newDir);
+
 		}
 		if (Input.GetKey (KeyCode.A)) {
 			currentKeyPressed = KeyCode.A;
@@ -62,7 +85,7 @@ public class Movement : MonoBehaviour {
 			dash = true;
 			startTime = Time.time;
 			endMarker= this.transform.position;
-			Vector3 auxEnd = endMarker + transform.forward * sprintSpeed;
+			Vector3 auxEnd = endMarker + -transform.right * sprintSpeed;
 			endMarker = auxEnd;
 			startMarker = this.transform.position;
 			journeyLength = Vector3.Distance(startMarker,endMarker);
@@ -96,7 +119,7 @@ public class Movement : MonoBehaviour {
 				GameObject o = enemyExplosionsParticlesObjectPool.GetPooledObject ();
 				o.transform.position = other.transform.position;
 				o.SetActive (true);
-				Destroy (other.gameObject);
+				other.gameObject.SetActive (false);
 				// poner aqui el sonido de matar a un enemigo
 			} else {
 				// HURTED BY ENEMY

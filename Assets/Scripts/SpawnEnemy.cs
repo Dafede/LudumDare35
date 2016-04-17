@@ -10,18 +10,31 @@ public class SpawnEnemy : MonoBehaviour {
 	private float timeSinceBeggining = 0.0f;
 	private float timeLastSpawn = 0.0f;
 
+	private ObjectPool enemyObjectPool = null;
+
+	private bool stopTime = false;
+	public bool StopTime
+	{
+		get { return stopTime;}
+		set { stopTime = value;}
+	}
+
 	// Use this for initialization
 	void Start () {
 		timeSinceBeggining = Time.time;
+		enemyObjectPool = new ObjectPool (enemyToSpawn, null, true, 500);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Time.time - timeLastSpawn >= timeBetweenSpawn) {
-			GameObject pointer = Instantiate (enemyToSpawn, transform.position, Quaternion.identity) as GameObject;
-			pointer.GetComponent<MoveTowards> ().objective = objectiveOfEnemy;
-			timeLastSpawn = Time.time;
+		if (!stopTime) {
+			if (Time.time - timeLastSpawn >= timeBetweenSpawn) {
+				GameObject o = enemyObjectPool.GetPooledObject ();
+				o.transform.position = transform.position;
+				o.SetActive (true);
+				o.GetComponent<MoveTowards> ().objective = objectiveOfEnemy;
+				timeLastSpawn = Time.time;
+			}
 		}
-
 	}
 }
