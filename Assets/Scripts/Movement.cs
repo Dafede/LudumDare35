@@ -24,6 +24,7 @@ public class Movement : MonoBehaviour {
 	private ObjectPool enemyExplosionsParticlesObjectPool = null;
 	public GameObject humanMorph = null;
 	public GameObject lightMorph = null;
+	public Canvas interfaceCanvas = null;
 	WaitForSeconds waitLifeTime = null;
 	bool specialMode = false;
 	Animator animator;
@@ -42,7 +43,7 @@ public class Movement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// debug input
-		if(Input.GetKey(KeyCode.Q))
+		if(Input.GetKey(KeyCode.Q) && interfaceCanvas.GetComponent<Interface> ().energyBar.sizeDelta.x == 100)
 		{
 			// can enter mode
 			TimeStop.StopTime ();
@@ -50,6 +51,7 @@ public class Movement : MonoBehaviour {
 			humanMorph.SetActive (false);
 			lightMorph.SetActive (true);
 			specialMode = true;
+			interfaceCanvas.GetComponent<Interface> ().activeEnergy ();
 			StartCoroutine (ExistSpecialMode());
 		}
 
@@ -123,7 +125,7 @@ public class Movement : MonoBehaviour {
 			}
 			transform.position = Vector3.Lerp(startMarker, endMarker, fracJourney);
 		}*/
-		if (Input.GetKeyDown(KeyCode.Space)) {
+		if (Input.GetKeyDown(KeyCode.Space) && specialMode == false) {
 			currentPosition=this.transform.position;
 			dash = true;
 			startTime = Time.time;
@@ -164,8 +166,7 @@ public class Movement : MonoBehaviour {
 				// poner aqui el sonido de matar a un enemigo
 			} else {
 				// HURTED BY ENEMY
-				Destroy(gameObject);
-
+				interfaceCanvas.GetComponent<Interface> ().getHit();
 				// poner aqui el sonido de ser golpeado por un enemigo
 			}
 

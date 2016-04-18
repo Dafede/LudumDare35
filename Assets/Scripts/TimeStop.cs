@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public static class TimeStop {
 
-	public static void StopTime(){
+	public static void StopTime(bool shaderActive=true){
 
 		// stop spawners
 		GameObject[] spawnersArray = GameObject.FindGameObjectsWithTag("EnemySpawner");
@@ -31,12 +31,13 @@ public static class TimeStop {
 			enemyExplosionArray [i].GetComponent<ParticleSystem> ().Pause ();
 		}
 
-		GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<InvertColorsEffect> ().enabled = true;
+		if(shaderActive)
+			GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<InvertColorsEffect> ().enabled = true;
 
 		return;
 	}
 
-	public static void PlayTime(){
+	public static void PlayTime(bool shaderActive=true){
 
 		// stop spawners
 		GameObject[] spawnersArray = GameObject.FindGameObjectsWithTag("EnemySpawner");
@@ -63,7 +64,8 @@ public static class TimeStop {
 			enemyExplosionArray [i].GetComponent<ParticleSystem> ().Play ();
 		}
 
-		GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<InvertColorsEffect> ().enabled = false;
+		if (shaderActive)
+			GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<InvertColorsEffect> ().enabled = false;
 
 		return;
 	}
