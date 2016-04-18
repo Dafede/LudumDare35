@@ -52,6 +52,7 @@ public class Movement : MonoBehaviour {
 			lightMorph.SetActive (true);
 			specialMode = true;
 			interfaceCanvas.GetComponent<Interface> ().activeEnergy ();
+			movSpeed = movSpeed * 1.25f;
 			StartCoroutine (ExistSpecialMode());
 		}
 
@@ -178,6 +179,7 @@ public class Movement : MonoBehaviour {
 		specialMode = false;
 		humanMorph.SetActive (true);
 		lightMorph.SetActive (false);
+		movSpeed = movSpeed / 1.25f;
 		TimeStop.PlayTime ();
 	}
 
