@@ -47,4 +47,12 @@ public class ObjectPool{
 		return null;
 	}
 
+	public void DisableAllObjects(){
+		for (int i = 0; i < pooledObjects.Count; i++) {
+			if (pooledObjects [i].activeInHierarchy) {
+				pooledObjects [i].SetActive (false);
+			}
+		}
+	}
+
 }

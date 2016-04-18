@@ -31,6 +31,9 @@ public class Movement : MonoBehaviour {
 
 	Rigidbody rb;
 
+	// invulnerability
+	private float timeSinceLastHit = 0.0f;
+
 		
 	// Use this for initialization
 	void Start () {
@@ -38,11 +41,19 @@ public class Movement : MonoBehaviour {
 
 		enemyExplosionsParticlesObjectPool = new ObjectPool (enemyExplosionParticles, null, true, 100);
 		rb = GetComponent<Rigidbody> ();
+		timeSinceLastHit = Time.time;
 	}
 
 	// Update is called once per frame
 	void Update () {
 		// debug input
+		if(Input.GetKey(KeyCode.P))
+		{
+			// can enter mode
+			Debug.Log("SCENE");
+			TimeStop.BeginScene();
+		}
+
 		if(Input.GetKey(KeyCode.Q) && interfaceCanvas.GetComponent<Interface> ().energyBar.sizeDelta.x == 100)
 		{
 			// can enter mode
@@ -166,9 +177,13 @@ public class Movement : MonoBehaviour {
 				other.gameObject.SetActive (false);
 				// poner aqui el sonido de matar a un enemigo
 			} else {
-				// HURTED BY ENEMY
-				interfaceCanvas.GetComponent<Interface> ().getHit();
-				// poner aqui el sonido de ser golpeado por un enemigo
+				if (Time.time - timeSinceLastHit > 2.0f) {
+					// HURTED BY ENEMY
+					timeSinceLastHit = Time.time;
+					interfaceCanvas.GetComponent<Interface> ().getHit();
+					// poner aqui el sonido de ser golpeado por un enemigo
+				}
+
 			}
 
 		}
