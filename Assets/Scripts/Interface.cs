@@ -17,6 +17,9 @@ public class Interface : MonoBehaviour {
 	bool setAgainEnergy = false;
 	bool isGameOver = false;
 
+	float beginActivationTime = 0.0f;
+	public GameObject player = null;
+
 	// Use this for initialization
 	void Start () {
 		normalScale = energyBar.sizeDelta;
@@ -27,28 +30,32 @@ public class Interface : MonoBehaviour {
 
 		if (isGameOver) {
 			if (Input.GetKeyDown (KeyCode.Space)) {
-				Time.timeScale = 1;
+				//Time.timeScale = 1;
 				//reiniciar juego
+
 			}
 		}
 
 		////////PARA PROBAR/////////////////
-		if (Input.GetKeyDown (KeyCode.Y)) {
+		/*if (Input.GetKeyDown (KeyCode.Y)) {
 			activeEnergy ();
-		}
+		}*/
 		if (Input.GetKeyDown (KeyCode.U)) {
 			getHit ();
 		}
 		////////////////////////////////////
 
 		if (activateEnergy) {
-			if (energyBar.sizeDelta.x < 0) {
+			if (energyBar.sizeDelta.x <= 0) {
 				activateEnergy = false;
 				valueScale = 0f;
 				setAgainEnergy=true;
+				beginActivationTime = Time.time;
 			} else {
-				valueScale -= decreaseValue;
-				energyBar.sizeDelta = new Vector2 (valueScale,normalScale.y);
+				//valueScale -= decreaseValue;
+				//energyBar.sizeDelta = new Vector2 (valueScale,normalScale.y);
+				energyBar.sizeDelta = Vector2.Lerp(new Vector2(100, normalScale.y), new Vector2(0, normalScale.y),(Time.time - beginActivationTime) / 5.0f);
+				Debug.Log (energyBar.sizeDelta.x);
 			}
 		}
 
@@ -57,8 +64,9 @@ public class Interface : MonoBehaviour {
 				setAgainEnergy = false;
 			} 
 			else {
-				valueScale += increaseValue;
-				energyBar.sizeDelta = new Vector2 (valueScale,normalScale.y);
+				energyBar.sizeDelta = Vector2.Lerp(new Vector2(0, normalScale.y), new Vector2(100, normalScale.y),(Time.time - beginActivationTime) / 10.0f);
+				//valueScale += increaseValue;
+				//energyBar.sizeDelta = new Vector2 (valueScale,normalScale.y);
 			}
 		}
 	}
@@ -66,12 +74,16 @@ public class Interface : MonoBehaviour {
 	public void activeEnergy(){
 		activateEnergy = true;
 		valueScale = normalScale.x;
+		beginActivationTime = Time.time;
 	}
 
 	public void gameOver(){
-		Time.timeScale = 0;
-		gameOverPanel.SetActive (true);
 		isGameOver = true;
+		gameOverPanel.SetActive (true);
+		TimeStop.StopTime (false);
+		player.GetComponent<Movement> ().enabled = false;
+		player.transform.FindChild ("LightMorph").gameObject.SetActive (false);
+		player.transform.FindChild ("characterFinalV2").gameObject.SetActive (false);
 		//gameOverPanel.GetComponent<Animator> ().Play ("Gm");
 	}
 		
