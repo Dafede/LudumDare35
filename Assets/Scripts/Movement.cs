@@ -91,7 +91,7 @@ public class Movement : MonoBehaviour {
 			transform.Rotate (new Vector3(0, anglesRotate * Time.deltaTime, 0));
 		}
 
-		if (Input.GetKeyDown(KeyCode.Space)) {
+		/*if (Input.GetKeyDown(KeyCode.Space)) {
 			currentPosition=this.transform.position;
 
 			dash = true;
@@ -122,6 +122,35 @@ public class Movement : MonoBehaviour {
 				// poner aqui el sonido de salir del modo dash
 			}
 			transform.position = Vector3.Lerp(startMarker, endMarker, fracJourney);
+		}*/
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			currentPosition=this.transform.position;
+			dash = true;
+			startTime = Time.time;
+			endMarker = this.transform.position + -transform.right * sprintSpeed;
+			startMarker = this.transform.position;
+			journeyLength = Vector3.Distance(startMarker,endMarker);
+
+			// change model
+			humanMorph.SetActive (false);
+			lightMorph.SetActive (true);
+			Instantiate(explosionParticles, transform.position, Quaternion.identity);
+			// Poner aqui el sonido de entrar al modo dash
+		}
+
+		// Logic
+		if (dash) {
+			float distCovered = (Time.time - startTime) * speed;
+			float fracJourney = distCovered / journeyLength;
+			if (fracJourney >= 0.9){
+				dash = false;
+				// back model
+				humanMorph.SetActive (true);
+				lightMorph.SetActive (false);
+				// poner aqui el sonido de salir del modo dash
+			}
+			// transform.position = ;
+			rb.MovePosition(Vector3.Lerp(startMarker, endMarker, fracJourney));
 		}
 	}
 
@@ -150,4 +179,14 @@ public class Movement : MonoBehaviour {
 		lightMorph.SetActive (false);
 		TimeStop.PlayTime ();
 	}
+
+	/*void OnCollisionEnter(Collision collision) {
+		Vector3 cd = (collision.transform.position - transform.position).normalized;
+		Debug.Log (cd);
+		rb.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
+		rb.angularVelocity = new Vector3 (0.0f, 0.0f, 0.0f);
+		rb.AddForce (2.0f * cd);
+		rb.AddRelativeForce(2.0f * cd);
+
+	}*/
 }
